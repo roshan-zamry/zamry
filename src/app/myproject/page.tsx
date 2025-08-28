@@ -1,12 +1,49 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import samle from "../assets/bannerbg.jpg";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-const projects = [
+const myprojects = [
+  {
+    title: "Payoneer products demo",
+    description:
+      "I built this site using React, Next.js, and TypeScript to showcase Payoneer's global events. I focused on making event details easy to browse, adding filtering, and ensuring a smooth, responsive experience.",
+    tags: ["React.js", "Next.js", "TypeScript"],
+    colors: ["#6366F1", "#A78BFA"],
+    link: "https://payoneer-indol.vercel.app/",
+    image: samle,
+  },
+  {
+    title: "Fujairah Run",
+    description:
+      "I created this WordPress site using Elementor and custom plugins for event registration. It demonstrates my skills in CMS, custom functionality, and event management.",
+    tags: ["WordPress", "Custom Plugin", "Elementor"],
+    colors: ["#10B981", "#3B82F6"],
+    link: "https://fujairahrun.com/",
+    image: samle,
+  },
+  {
+    title: "EvoRide",
+    description:
+      "I designed this platform on Wix Studio to showcase electric vehicles. It highlights my skills in e-commerce, UI design, and creating a smooth product showcase experience.",
+    tags: ["Wix Studio", "JavaScript", "UI Design"],
+    colors: ["#F59E0B", "#EF4444"],
+    link: "https://www.evoride.us/",
+    image: samle,
+  },
+  {
+    title: "Payoneer Events",
+    description:
+      "I built this site using React, Next.js, and TypeScript to showcase Payoneer's global events. I focused on making event details easy to browse, adding filtering, and ensuring a smooth, responsive experience.",
+    tags: ["React.js", "Next.js", "TypeScript"],
+    colors: ["#6366F1", "#A78BFA"],
+    link: "https://payoneerevents.com/",
+    image: samle,
+  },
   {
     title: "CompanyName",
     description:
@@ -25,23 +62,13 @@ const projects = [
     link: "https://nbf-art.com/",
     image: samle,
   },
-
-  {
-    title: "Payoneer products demo",
-    description:
-      "I built this site using React, Next.js, and TypeScript to showcase Payoneer's global events. I focused on making event details easy to browse, adding filtering, and ensuring a smooth, responsive experience.",
-    tags: ["React.js", "Next.js", "TypeScript"],
-    colors: ["#6366F1", "#A78BFA"],
-    link: "https://payoneer-indol.vercel.app/",
-    image: samle,
-  },
 ];
 
 const ProjectCard = ({
   project,
   index,
 }: {
-  project: (typeof projects)[0];
+  project: (typeof myprojects)[0];
   index: number;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -56,6 +83,7 @@ const ProjectCard = ({
       onHoverEnd={() => setIsHovered(false)}
       onClick={() => setIsHovered(!isHovered)} // mobile tap toggle
     >
+      {/* Project Image with Zoom Effect */}
       <motion.div
         className="absolute inset-0"
         animate={{ scale: isHovered ? 1.05 : 1 }}
@@ -76,6 +104,7 @@ const ProjectCard = ({
         />
       </motion.div>
 
+      {/* Project Info - Slides Up */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 z-10"
         animate={{ y: isHovered ? 0 : 100, opacity: isHovered ? 1 : 0.9 }}
@@ -143,6 +172,8 @@ const ProjectCard = ({
           </a>
         </motion.div>
       </motion.div>
+
+      {/* Colorful Glow */}
       <motion.div
         className="absolute inset-0 opacity-0 rounded-2xl"
         style={{
@@ -155,10 +186,14 @@ const ProjectCard = ({
   );
 };
 
-export default function ProjectsShowcase() {
+export default function MyProjectPage() {
   return (
-    <div id="projects" className="bg-black py-16 sm:py-20 px-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-black min-h-screen">
+      {/* Navbar on top */}
+      <Navbar />
+
+      {/* Page Content */}
+      <div className="py-16 sm:py-20 px-4 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -166,49 +201,17 @@ export default function ProjectsShowcase() {
           className="text-center mb-12 sm:mb-16"
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-4">
-            Things I&apos;ve Built
+            Featured Projects
           </h2>
-          <p className="text-base sm:text-xl text-white/70 max-w-2xl mx-auto">
-            Selected works showcasing my skills in development and design
-          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {projects.map((project, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {myprojects.map((project, index) => (
             <ProjectCard key={index} project={project} index={index} />
           ))}
         </div>
-
-        <motion.div
-          className="flex justify-center mt-12 sm:mt-16"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <button className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-6 sm:px-8 py-2 sm:py-3 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30">
-            <Link
-              href="/myproject"
-              className="relative z-10 flex items-center gap-2"
-            >
-              <span>View Projects</span>
-              <svg
-                className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                />
-              </svg>
-            </Link>
-            <span className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          </button>
-        </motion.div>
       </div>
+      <Footer />
     </div>
   );
 }

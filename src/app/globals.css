@@ -47,3 +47,13 @@
    0% { opacity: 0.3; text-shadow: 0 0 0px #00ffaa; }
   100% { opacity: 0.8; text-shadow: 0 0 3px #00ffaa; }
  }
+@font-face {
+  font-family: "Asimovian";
+  src: url("./assets/font/Asimovian-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Asimovian",  sans-serif;
+}

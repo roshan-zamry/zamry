@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
 import ExperienceTimeline from "./pages/ExperienceTimeline";
 import Project from "./pages/Project";
+
 import Testimonials from "./pages/Carousel";
 import Footer from "./components/Footer";
 

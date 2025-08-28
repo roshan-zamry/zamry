@@ -1,164 +1,31 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-
-// Seeded random number generator (consistent between server and client)
-function seededRandom(seed: number) {
-  const x = Math.sin(seed) * 10000;
-  return x - Math.floor(x);
-}
+import ThreeScene from "./ThreeScene";
 
 const PersonalFooter = () => {
-  const name = "Alex Johnson";
-  const title = "Senior Developer";
-  const email = "alex.johnson@example.com";
-  const phone = "+1 (555) 123-4567";
-
-  // Generate a single random seed that will be used for all random values
-  const [seed] = useState(() => Math.floor(Math.random() * 1000000));
-
-  // Symbiote tendrils data
-  const [tendrils, setTendrils] = useState<
-    Array<{
-      id: number;
-      path: string;
-      opacity: number;
-      scale: number;
-      x: number;
-      y: number;
-      rotate: number;
-      animateX: number;
-      animateY: number;
-      animateRotate: number;
-      duration: number;
-    }>
-  >([]);
-
-  // Pre-calculate blob data using seeded random
-  const blobs = Array.from({ length: 3 }).map((_, i) => {
-    const blobSeed = seed + i * 100; // Different seed for each blob
-    return {
-      id: i,
-      x: seededRandom(blobSeed) * 100,
-      y: seededRandom(blobSeed + 1) * 100,
-      width: 100 + seededRandom(blobSeed + 2) * 200,
-      height: 100 + seededRandom(blobSeed + 3) * 200,
-      color: i % 2 === 0 ? "bg-purple-900/30" : "bg-black/40",
-      animateX: seededRandom(blobSeed + 4) * 2 - 1,
-      animateY: seededRandom(blobSeed + 5) * 2 - 1,
-      duration: 30 + seededRandom(blobSeed + 6) * 20,
-    };
-  });
-
-  useEffect(() => {
-    // Generate tendril paths using seeded random
-    const generateTendrilPath = (tendrilSeed: number) => {
-      const complexity = 5 + Math.floor(seededRandom(tendrilSeed) * 3);
-      let path = "M0,0";
-      for (let i = 1; i <= complexity; i++) {
-        const x = i * (30 + seededRandom(tendrilSeed + i) * 20);
-        const y = (seededRandom(tendrilSeed + i + 1) - 0.5) * 100;
-        path += ` Q${x - 15},${y} ${x},${y}`;
-      }
-      return path;
-    };
-
-    // Generate 3-5 tendrils with consistent random values
-    const tendrilCount = 3 + Math.floor(seededRandom(seed) * 2);
-    setTendrils(
-      Array.from({ length: tendrilCount }, (_, i) => {
-        const tendrilSeed = seed + i * 50; // Different seed for each tendril
-        return {
-          id: i,
-          path: generateTendrilPath(tendrilSeed),
-          opacity: 0.03 + seededRandom(tendrilSeed + 2) * 0.02,
-          scale: 0.8 + seededRandom(tendrilSeed + 3) * 0.4,
-          x: seededRandom(tendrilSeed + 4) * 100,
-          y: seededRandom(tendrilSeed + 5) * 100,
-          rotate: seededRandom(tendrilSeed + 6) * 360,
-          animateX: seededRandom(tendrilSeed + 7) * 2 - 1,
-          animateY: seededRandom(tendrilSeed + 8) * 2 - 1,
-          animateRotate: seededRandom(tendrilSeed + 9) * 10 - 5,
-          duration: 20 + seededRandom(tendrilSeed + 10) * 10,
-        };
-      })
-    );
-  }, [seed]);
+  const name = "Roshan Zamry";
+  const title = "Web Developer";
+  const email = "roshan.zamry7@gmail.com";
+  const phone = "0522583846";
 
   return (
-    <footer className="relative bg-gradient-to-br from-slate-900 to-slate-950 overflow-hidden py-16 px-4 md:px-8 border-t border-slate-800">
-      {/* Venom-like symbiote tendrils */}
-      {tendrils.map((tendril) => (
-        <motion.svg
-          key={tendril.id}
-          initial={{
-            x: `${tendril.x}%`,
-            y: `${tendril.y}%`,
-            opacity: 0,
-            rotate: tendril.rotate,
-            scale: tendril.scale,
-          }}
-          animate={{
-            x: [`${tendril.x}%`, `${tendril.x + tendril.animateX}%`],
-            y: [`${tendril.y}%`, `${tendril.y + tendril.animateY}%`],
-            rotate: [tendril.rotate, tendril.rotate + tendril.animateRotate],
-            opacity: [0, tendril.opacity, 0],
-            scale: [tendril.scale * 0.9, tendril.scale * 1.1],
-          }}
-          transition={{
-            duration: tendril.duration,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "easeInOut",
-          }}
-          className="absolute pointer-events-none"
-        >
-          <path
-            d={tendril.path}
-            stroke="currentColor"
-            strokeWidth="2"
-            fill="none"
-            className="text-purple-900/80"
-          />
-        </motion.svg>
-      ))}
-
-      {/* Subtle organic blobs */}
-      {blobs.map((blob) => (
-        <motion.div
-          key={`blob-${blob.id}`}
-          initial={{
-            x: `${blob.x}%`,
-            y: `${blob.y}%`,
-            opacity: 0,
-          }}
-          animate={{
-            x: [`${blob.x}%`, `${blob.x + blob.animateX}%`],
-            y: [`${blob.y}%`, `${blob.y + blob.animateY}%`],
-            opacity: [0, 0.03, 0],
-          }}
-          transition={{
-            duration: blob.duration,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-          className={`absolute rounded-full ${blob.color}`}
-          style={{
-            width: `${blob.width}px`,
-            height: `${blob.height}px`,
-            filter: "blur(60px)",
-          }}
-        />
-      ))}
-
-      {/* Your content */}
+    <footer
+      id="con-foot"
+      className="relative bg-gradient-to-br from-slate-900 to-slate-950 overflow-hidden py-16 px-4 md:px-8 border-t border-slate-800"
+    >
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-12">
           <div className="flex flex-col items-center">
-            <div className="w-32 h-32 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg flex items-center justify-center mb-4">
-              <span className="text-4xl font-bold text-white">3D</span>
+            <div
+              className="w-40 h-40 rounded-xl flex items-center justify-center mb-4 overflow-hidden relative"
+              style={{
+                border: "1.5px solid rgba(59,130,246,0.5)",
+                boxShadow: "0 0 10px rgba(59,130,246,0.8)",
+              }}
+            >
+              <ThreeScene scaleFactor={0.8} height="100%" />
             </div>
+
             <h2 className="text-xl font-bold text-white">{name}</h2>
             <p className="text-sm text-slate-400">{title}</p>
           </div>
@@ -219,14 +86,39 @@ const PersonalFooter = () => {
                 Connect
               </h3>
               <div className="flex gap-4">
-                {["LinkedIn", "GitHub", "Twitter", "Dribbble"].map((social) => (
+                {[
+                  {
+                    name: "Facebook",
+                    url: "https://www.facebook.com/roshan.zamry/",
+                    short: "FB",
+                  },
+                  {
+                    name: "Linkedin",
+                    url: "https://www.linkedin.com/in/roshan-zamry/",
+                    short: "LI",
+                  },
+                  {
+                    name: "Instagram",
+                    url: "https://www.instagram.com/roshan_zamry/",
+                    short: "IG",
+                  },
+                  {
+                    name: "Discord",
+                    url: "https://x.com/roshanzamry7",
+                    short: "x",
+                  },
+                ].map((social) => (
                   <a
-                    key={social}
-                    href="#"
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-10 h-10 rounded-full bg-slate-800/50 hover:bg-slate-800/80 transition-colors flex items-center justify-center border border-slate-700/50"
-                    aria-label={social}
+                    aria-label={social.name}
                   >
-                    <span className="text-slate-300 text-sm">{social[0]}</span>
+                    <span className="text-slate-300 text-sm">
+                      {social.short}
+                    </span>
                   </a>
                 ))}
               </div>

@@ -2,29 +2,28 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useMemo, useCallback } from "react";
-import Image from "next/image";
 
 const testimonials = [
   {
-    name: "Sarah Ahmed",
-    title: "Creative Director at PixelWave",
+    name: "Sajad Jaward",
+    title: "Software Engineer",
     quote:
-      "Working with you was seamless. Your ideas elevated the project beyond what we imagined.",
-    image: "/avatars/sarah.jpg",
+      "I highly endorse Zamry as an accomplished WordPress CMS web developer. Proficient in HTML, CSS, PHP, and WordPress. He crafts captivating and user-centric websites. Their meticulousness, adept problem-solving abilities, and aptitude for customizing WordPress themes contribute to their invaluable expertise. Zamry's unwavering commitment to delivering superior outcomes truly distinguishes them in the field.",
+    image: "",
   },
   {
-    name: "James Lee",
-    title: "Product Manager at TechNova",
+    name: "Shadeer",
+    title: "CEO of Happymatch.lk & Global Study Path",
     quote:
-      "Your dedication and problem-solving skills are top-tier. You made complex things look easy.",
-    image: "/avatars/james.jpg",
+      "I highly recommend Zamry as a WordPress and web developer. With his expertise in both areas, he possesses a unique skill set that allows him to create dynamic and user-friendly websites. Zamry consistently delivers high-quality work, paying meticulous attention to detail. His technical proficiency, problem-solving abilities, and strong work ethic make them a valuable asset to any team.",
+    image: "",
   },
   {
-    name: "Priya Verma",
-    title: "CEO at CloudAura",
+    name: "Zaid",
+    title: "Lead Web Developer at Cosmopole Consultancy",
     quote:
-      "A rare mix of creativity and technical brilliance. I'd hire you again in a heartbeat.",
-    image: "/avatars/priya.jpg",
+      "I highly recommend Zamry as a WordPress and web developer. His expertise in creating dynamic and user-friendly websites is impressive. Zamry consistently delivers high-quality work with great attention to detail. His technical skills, problem-solving abilities, and professionalism make him a valuable asset to any project or team.",
+    image: "",
   },
 ];
 
@@ -73,7 +72,8 @@ export default function Testimonials() {
   };
 
   return (
-    <div className="bg-slate-950 py-24 px-4">
+    <div className="bg-slate-950 py-24 px-4" style={{ overflow: "hidden" }}>
+      {" "}
       <motion.h2
         className="text-center text-4xl font-bold mb-16 text-white"
         initial={{ opacity: 0, y: -20 }}
@@ -82,7 +82,6 @@ export default function Testimonials() {
       >
         Client Testimonials
       </motion.h2>
-
       <div className="max-w-4xl mx-auto relative h-[400px]">
         <AnimatePresence mode="wait">
           <motion.div
@@ -120,7 +119,7 @@ export default function Testimonials() {
             </div>
 
             <div className="relative z-10 h-full flex flex-col items-center justify-center p-8 text-center">
-              <motion.div
+              {/* <motion.div
                 className="w-20 h-20 rounded-full border-2 border-white/20 mb-6 overflow-hidden relative"
                 whileHover={{ scale: 1.05 }}
               >
@@ -130,10 +129,10 @@ export default function Testimonials() {
                   fill
                   className="object-cover"
                 />
-              </motion.div>
+              </motion.div> */}
 
               <motion.blockquote
-                className="text-lg md:text-xl font-medium text-white mb-6 max-w-2xl"
+                className="text-sm md:text-xl font-medium text-white mb-6 max-w-2xl"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}

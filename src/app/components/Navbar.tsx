@@ -1,86 +1,104 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMenu = () => setOpen(!open);
+
+  // Smooth scroll on hash navigation
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleHash = () => {
+        if (window.location.hash) {
+          const el = document.querySelector(window.location.hash);
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+      };
+
+      // run when hash changes
+      window.addEventListener("hashchange", handleHash);
+      // run on first load if page already has a hash
+      handleHash();
+
+      return () => window.removeEventListener("hashchange", handleHash);
+    }
+  }, [pathname]);
 
   return (
     <nav className="bg-slate-900 text-white p-4">
       <div className="flex items-center justify-between max-w-8xl mx-auto">
-        {/* Logo with gradient hover effect */}
-        <h1 className="text-2xl font-bold relative group">
-          <span className="group-hover:opacity-0 transition-opacity duration-300">
-            MyPortfolio
-          </span>
-          <span className="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 opacity-0 group-hover:opacity-100 hover:animate-gradient-x">
-            MyPortfolio
-          </span>
-        </h1>
+        {/* Logo */}
+        <Link href="/">
+          <h1 className="text-2xl font-bold relative group cursor-pointer">
+            <span className="group-hover:opacity-0 transition-opacity duration-300">
+              {"<rz />"}
+            </span>
+            <span className="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 hover:animate-gradient-x">
+              {"<rz />"}
+            </span>
+          </h1>
+        </Link>
 
-        {/* Rest of your navbar code remains the same */}
+        {/* Desktop Nav */}
         <ul className="hidden md:flex gap-6">
           <li>
-            <a href="#home" className="hover:text-orange-400">
+            <Link href="/#hero" className="hover:text-indigo-600">
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#about" className="hover:text-orange-400">
+            <Link href="/#timeline" className="hover:text-indigo-600">
               About
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#skills" className="hover:text-orange-400">
-              Skills
-            </a>
-          </li>
-          <li>
-            <a href="#projects" className="hover:text-orange-400">
+            <Link href="/#projects" className="hover:text-indigo-600">
               Projects
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#contact" className="hover:text-orange-400">
+            <Link href="/#con-foot" className="hover:text-indigo-600">
               Get in Touch
-            </a>
+            </Link>
           </li>
         </ul>
 
+        {/* Mobile Toggle */}
         <button onClick={toggleMenu} className="md:hidden">
           {open ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {open && (
         <ul className="md:hidden mt-4 flex flex-col gap-4 text-center">
           <li>
-            <a href="#home" onClick={toggleMenu}>
+            <Link href="/#hero" onClick={toggleMenu}>
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#about" onClick={toggleMenu}>
+            <Link href="/#timeline" onClick={toggleMenu}>
               About
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#skills" onClick={toggleMenu}>
-              Skills
-            </a>
-          </li>
-          <li>
-            <a href="#projects" onClick={toggleMenu}>
+            <Link href="/#projects" onClick={toggleMenu}>
               Projects
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#contact" onClick={toggleMenu}>
+            <Link href="/#con-foot" onClick={toggleMenu}>
               Get in Touch
-            </a>
+            </Link>
           </li>
         </ul>
       )}

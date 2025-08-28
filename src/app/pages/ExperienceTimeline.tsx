@@ -1,12 +1,7 @@
 "use client";
-import React, { useRef, useState } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
-  MotionValue,
-} from "framer-motion";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 type Experience = {
   year: string;
@@ -14,401 +9,347 @@ type Experience = {
   company: string;
   description: string[];
   stack: string[];
-  impact: string;
+  impact?: string;
 };
 
-type ThreeDCardProps = {
-  index: number;
-  experience: Experience;
-  scrollProgress: MotionValue<number>;
-  isHologramActive: boolean;
-  range: [number, number, number];
-};
+const experiences: Experience[] = [
+  {
+    year: "JULY 2023 - PRESENT ",
+    title: "Web Developer ",
+    company: "CX Unicorn l JLT, Dubai",
+    description: [
+      "Creating reusable components.",
+      "Integration of APIs in React",
+      "React Router for routing.",
+      "Custom theme development and customization in WordPress Creating and customizing plugins.",
+      "Familiarity with Elementor or other WordPress page builders.",
+    ],
+    stack: [
+      "React",
+      "TypeScript",
+      "JavaScript",
+      "PHP",
+      "CodeIgniter",
+      "WordPress",
+      "Custom Plugins",
+      "Data Table",
+    ],
+    impact:
+      "Increased development efficiency and accelerated project delivery by implementing reusable components and optimizing workflows.",
+  },
+  {
+    year: "SEP 2021 - MAY 2023",
+    title: "Web Developer",
+    company: "Brocrpt l Colombo, Sri lanka",
+    description: [
+      "Developed and maintained responsive websites using CMS like WordPress with HTML, CSS, and JavaScript",
+      "Familiarity with Elementor or other WordPress page builders.",
+      "Basic security and performance optimization in WordPress.",
+      "Created SEO-friendly content ",
+      "Improved speed and asset optimization.",
+    ],
+    stack: [
+      "Trello",
+      "JavaScript",
+      "PHP",
+      "Data Table",
+      "CodeIgniter",
+      "CMS",
+      "WordPress",
+      "Custom Plugins",
+    ],
+    impact:
+      "Improved development workflow and project efficiency using Trello, PHP, and WordPress.",
+  },
+  {
+    year: "SEP 2018 TO SEP 2021",
+    title: "Data Analyst",
+    company: "GLC Europe l Colombo, Sri Lanka",
+    description: [
+      "Created marketing materials such as banners, shipping labels,social media posts, and invoice forms",
+      "Managed product website using Shopify and Wordpress ",
+      "Photographed and edited apparels and accessories",
+      "Pioneered neural design systems",
+    ],
+    stack: ["Excel", "Virtual Meeting Tools", "WordPress", "Custom Plugins"],
+    impact:
+      "Supported business growth by improving online store management and producing marketing materials that boosted customer engagement.",
+  },
+];
 
-const ThreeDCard = ({
-  index,
-  experience,
-  scrollProgress,
-  isHologramActive,
-  range,
-}: ThreeDCardProps) => {
-  const [start, midpoint, end] = range;
-
-  const opacity = useTransform(
-    scrollProgress,
-    [start, start + 0.1, end - 0.1, end],
-    [0, 1, 1, 0]
-  );
-
-  const y = useTransform(
-    scrollProgress,
-    [start, midpoint, end],
-    [300, 0, -300]
-  );
-  const scale = useTransform(
-    scrollProgress,
-    [start, midpoint, end],
-    [0.9, 1, 0.9]
-  );
-  const rotateY = useTransform(
-    scrollProgress,
-    [start, midpoint, end],
-    [index % 2 ? -15 : 15, 0, index % 2 ? 15 : -15]
-  );
-
-  const glow = useTransform(
-    scrollProgress,
-    [start, midpoint, end],
-    [
-      "0 0 0 rgba(59,130,246,0)",
-      isHologramActive
-        ? "0 0 40px rgba(59,130,246,0.8)"
-        : "0 0 20px rgba(59,130,246,0.3)",
-      "0 0 0 rgba(59,130,246,0)",
-    ]
-  );
-
-  const borderGlow = useTransform(
-    scrollProgress,
-    [start, midpoint, end],
-    [
-      "0 0 0 rgba(59,130,246,0)",
-      isHologramActive
-        ? "0 0 15px rgba(59,130,246,0.5)"
-        : "0 0 5px rgba(59,130,246,0.1)",
-      "0 0 0 rgba(59,130,246,0)",
-    ]
-  );
+// ------------------- CARD COMPONENT -------------------
+function ExperienceCard({ exp }: { exp: Experience }) {
+  const { ref, inView } = useInView({ threshold: 0.6, triggerOnce: false });
 
   return (
     <motion.div
-      className="relative p-4 sm:p-6 md:p-8 rounded-2xl border border-gray-800 bg-gradient-to-br from-[#0d1120] to-[#1a1b3a] overflow-hidden h-full w-full"
+      ref={ref}
+      initial={{ opacity: 0, scale: 0.9, y: 100 }}
+      animate={
+        inView
+          ? {
+              opacity: 1,
+              scale: 1,
+              y: 0,
+              boxShadow: "0 0 40px rgba(59,130,246,0.8)",
+            }
+          : {
+              opacity: 0,
+              scale: 0.9,
+              y: 100,
+              boxShadow: "0 0 0 rgba(59,130,246,0)",
+            }
+      }
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="relative w-full max-w-3xl mx-auto p-6 sm:p-10 rounded-2xl border bg-gradient-to-br from-[#0d1120] to-[#1a1b3a] overflow-hidden"
       style={{
-        opacity,
-        y,
-        scale,
-        rotateY,
-        boxShadow: glow,
-        borderColor: isHologramActive
-          ? "rgba(59,130,246,0.5)"
-          : "rgba(255,255,255,0.1)",
-        borderWidth: isHologramActive ? "1.5px" : "1px",
+        borderColor: inView ? "rgba(59,130,246,0.5)" : "rgba(255,255,255,0.1)",
+        borderWidth: inView ? "1.5px" : "1px",
       }}
     >
-      <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10" />
+      {/* Grid overlay inside card */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-10" />
+
+      {/* Radial hologram glow */}
       <motion.div
         className="absolute inset-0"
         style={{
-          opacity: useTransform(
-            scrollProgress,
-            [start, midpoint, end],
-            [0, isHologramActive ? 0.3 : 0, 0]
-          ),
           background:
-            "radial-gradient(circle at center, rgba(59,130,246,0.2) 0%, transparent 70%)",
+            "radial-gradient(circle at center, rgba(59,130,246,0.15) 0%, transparent 70%)",
+          opacity: inView ? 0.4 : 0,
         }}
       />
-      <div className="relative z-10 h-full flex flex-col">
-        <div className="flex justify-between items-start mb-4">
-          <motion.span
-            className="text-blue-400 font-mono text-sm"
+
+      {/* Card Content */}
+      <div className="relative z-10 space-y-4">
+        {/* Year + Company */}
+        <div className="flex justify-between items-center">
+          <span
+            className="text-blue-400 sm:text-sm text-[12px]"
             style={{
-              textShadow: isHologramActive
-                ? "0 0 8px rgba(59,130,246,0.7)"
-                : "none",
+              textShadow: inView ? "0 0 8px rgba(59,130,246,0.7)" : "none",
             }}
           >
-            {experience.year}
-          </motion.span>
-          <motion.span
-            className="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-xs"
+            {exp.year}
+          </span>
+          <span
+            className="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full sm:text-sm text-[12px]"
             style={{
-              boxShadow: isHologramActive
-                ? "0 0 15px rgba(59,130,246,0.5)"
-                : "none",
-              scale: isHologramActive ? 1.05 : 1,
+              boxShadow: inView ? "0 0 15px rgba(59,130,246,0.5)" : "none",
             }}
           >
-            {experience.company}
-          </motion.span>
+            {exp.company}
+          </span>
         </div>
-        <motion.h3
-          className="text-xl sm:text-2xl font-bold mb-3"
+
+        {/* Title */}
+        <h3
+          className="text-2xl font-bold text-white"
           style={{
-            textShadow: isHologramActive
-              ? "0 0 10px rgba(59,130,246,0.5)"
-              : "none",
+            textShadow: inView ? "0 0 10px rgba(59,130,246,0.5)" : "none",
           }}
         >
-          {experience.title}
-        </motion.h3>
-        <ul className="space-y-2 mb-6 flex-grow text-sm sm:text-base">
-          {experience.description.map((item, i) => (
+          {exp.title}
+        </h3>
+
+        {/* Description */}
+        <ul className="space-y-2 text-gray-300 text-sm">
+          {exp.description.map((d, i) => (
             <motion.li
               key={i}
-              className="flex items-start"
+              className="flex gap-2"
               initial={{ opacity: 0, x: -10 }}
               animate={{
-                opacity: isHologramActive ? 1 : 0.8,
+                opacity: inView ? 1 : 0,
                 x: 0,
               }}
               transition={{ delay: i * 0.05 }}
             >
-              <span className="text-blue-400 mr-2">▹</span>
-              <span className="text-gray-300">{item}</span>
+              <span className="text-blue-400">▹</span> {d}
             </motion.li>
           ))}
         </ul>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {experience.stack.map((tech) => (
+
+        {/* Tech Stack */}
+        <div className="flex flex-wrap gap-2">
+          {exp.stack.map((s) => (
             <motion.span
-              key={tech}
+              key={s}
               className="px-2 py-1 bg-blue-900/20 text-blue-300 rounded text-xs"
               whileHover={{
                 scale: 1.1,
                 boxShadow: "0 0 10px rgba(59,130,246,0.5)",
               }}
             >
-              {tech}
+              {s}
             </motion.span>
           ))}
         </div>
-        <motion.div
+
+        {/* Impact */}
+        <p
           className="text-sm text-blue-200"
           style={{
-            textShadow: isHologramActive
-              ? "0 0 5px rgba(59,130,246,0.5)"
-              : "none",
+            textShadow: inView ? "0 0 5px rgba(59,130,246,0.5)" : "none",
           }}
         >
-          <strong>Impact:</strong> {experience.impact}
-        </motion.div>
+          <strong>Impact:</strong> {exp.impact}
+        </p>
       </div>
     </motion.div>
   );
-};
+}
 
-const experiences: Experience[] = [
-  {
-    year: "2025",
-    title: "CTO",
-    company: "NeuroLink",
-    description: [
-      "Directed team of 50 engineers building brain-computer interfaces",
-      "Developed neural compression algorithms (83% efficiency)",
-      "Created real-time thought visualization system",
-      "Patented 7 neuro-adaptive algorithms",
-    ],
-    stack: ["Python", "CUDA", "TF", "React"],
-    impact: "Enabled 500k+ neural augmentations",
-  },
-  {
-    year: "2027",
-    title: "Chief Singularity Engineer",
-    company: "OmniMind",
-    description: [
-      "Developed first AGI system with consciousness transfer",
-      "Created self-evolving architecture that improves 12% weekly",
-      "Designed ethical constraint framework for autonomous AI",
-      "Pioneered quantum-neural hybrid computing",
-    ],
-    stack: ["NeuroScript", "QNN", "Plasma", "TensorFlow 9.0"],
-    impact: "Achieved Turing-level consciousness in synthetic systems",
-  },
-  {
-    year: "2029",
-    title: "Quantum UI Architect",
-    company: "MetaVerse Inc.",
-    description: [
-      "Designed first quantum-powered user interfaces",
-      "Developed emotion-responsive UI framework",
-      "Created cross-dimensional navigation patterns",
-      "Pioneered neural design systems",
-    ],
-    stack: ["QML", "React-Quantum", "EmotionJS", "Web4D"],
-    impact: "Shaped UX for 10M+ cross-reality users",
-  },
-  {
-    year: "2031",
-    title: "Reality Curator",
-    company: "OmniCorp",
-    description: [
-      "Orchestrated personalized reality streams",
-      "Developed context-aware reality blending",
-      "Created ethical reality modulation framework",
-      "Designed adaptive consciousness interfaces",
-    ],
-    stack: ["RealityJS", "NeuroCSS", "Flow-Quantum", "TensorMind"],
-    impact: "Curated 1B+ personalized reality experiences",
-  },
-];
-
-export function HyperExperienceTimeline() {
+// ------------------- PAGE COMPONENT -------------------
+export default function HyperExperienceTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [activeHologram, setActiveHologram] = useState<number | null>(null);
+  const [windowHeight, setWindowHeight] = useState(0);
+
+  const [floatingItems, setFloatingItems] = useState<
+    { top: string; left: string; rotate: number }[]
+  >([]);
+
+  useEffect(() => {
+    setWindowHeight(window.innerHeight);
+    const handleResize = () => setWindowHeight(window.innerHeight);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Generate floating positions AFTER mount (hydration safe)
+  useEffect(() => {
+    const items = Array.from({ length: 12 }).map(() => ({
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      rotate: Math.random() * 20 - 10,
+    }));
+    setFloatingItems(items);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  const cardYRange = [400, 0, -400];
-  const opacityRange = [0, 2, 2, 0];
-
-  const cardYs = [
-    useTransform(scrollYProgress, [0, 0.2, 0.4], cardYRange),
-    useTransform(scrollYProgress, [0.2, 0.4, 0.6], cardYRange),
-    useTransform(scrollYProgress, [0.4, 0.6, 0.8], cardYRange),
-    useTransform(scrollYProgress, [0.6, 0.8, 0.9], cardYRange),
-  ];
-
-  const cardOpacities = [
-    useTransform(scrollYProgress, [0, 0.1, 0.3, 0.4], opacityRange),
-    useTransform(scrollYProgress, [0.2, 0.3, 0.5, 0.6], opacityRange),
-    useTransform(scrollYProgress, [0.4, 0.5, 0.7, 0.8], opacityRange),
-    useTransform(scrollYProgress, [0.6, 0.7, 0.9, 0.9], opacityRange),
-  ];
-
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const titleY = useTransform(scrollYProgress, [0, 0.2], [0, -50]);
-
-  // Connection lines between cards
-  const lineProgress = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const lineDashOffset = useTransform(lineProgress, (val) => `${100 - val}%`);
-
-  useMotionValueEvent(scrollYProgress, "change", (latest: number) => {
-    const index = experiences.findIndex((_, i) => {
-      const start = i * 0.2;
-      const end = start + 0.4;
-      return latest >= start + 0.15 && latest <= end - 0.15;
-    });
-    setActiveHologram(index === -1 ? null : index);
-  });
-  const totalScrollHeight = 100 + experiences.length * 35;
+  const parallaxY1 = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, -windowHeight * 0.2]
+  );
+  const parallaxY2 = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, windowHeight * 0.2]
+  );
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
 
   return (
     <section
+      id="timeline"
       ref={containerRef}
-      className="relative w-full overflow-hidden bg-[#0a0c1a]"
-      style={{ height: "=100vh" }} // Changed to fixed 300vh - adjust this as needed
+      className="relative min-h-screen bg-[#0a0c1a] text-white overflow-hidden"
     >
-      {/* Neon Cyberpunk City Background */}
+      {/* Animated Cyberpunk Background */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* City Skyline Silhouette */}
-
-        {/* Neon Grid */}
+        {/* Main grid */}
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
-          linear-gradient(to right, rgba(138, 43, 226, 0.1) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(138, 43, 246, 0.1) 1px, transparent 1px)
-        `,
+              linear-gradient(to right, rgba(138,43,226,0.1) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(138,43,226,0.1) 1px, transparent 1px)
+            `,
             backgroundSize: "50px 50px",
             opacity: 0.3,
           }}
         />
 
-        {/* Floating Neon Signs */}
-        {[...Array(8)].map((_, i) => (
+        {/* Animated gradient orbs */}
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(59,130,246,0.4) 0%, transparent 70%)",
+            y: parallaxY1,
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full opacity-20 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(138,43,226,0.4) 0%, transparent 70%)",
+            y: parallaxY2,
+          }}
+        />
+
+        {/* Floating cyberpunk elements */}
+        {floatingItems.map((item, i) => (
           <motion.div
             key={i}
-            className="absolute text-[#8a2be2] font-bold text-xl md:text-3xl"
+            className="absolute text-[#3b82f680] font-bold text-lg md:text-2xl"
             style={{
-              top: `${Math.random() * 70 + 10}%`,
-              left: `${Math.random() * 80 + 10}%`,
+              top: item.top,
+              left: item.left,
               textShadow: "0 0 10px #8a2be2",
-              opacity: useTransform(
-                scrollYProgress,
-                [i * 0.1, i * 0.1 + 0.2],
-                [0, 0.7]
-              ),
-              rotate: Math.random() * 10 - 5,
+              opacity: 0.7,
+              rotate: item.rotate,
+            }}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.4, 0.8, 0.4],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 10,
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
           >
             {
               [
-                "OPEN",
-                "24/7",
-                "TECH",
-                "NEON",
-                "CYBER",
-                "FUTURE",
-                "DIGITAL",
-                "PUNK",
+                "React.js",
+                "Next.js",
+                "HTML",
+                "CSS",
+                "JavaScript",
+                "TypeScript",
+                "Tailwind",
+                "Chakra-UI",
+                "GIT,GITHUB",
+                "Azure-DevOps",
+                "WordPress",
               ][i]
             }
           </motion.div>
         ))}
-
-        {/* Animated Neon Lights */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-1/3"
-          style={{
-            background: `linear-gradient(
-          to top,
-          rgba(138, 43, 226, 0.3) 0%,
-          rgba(138, 43, 226, 0.1) 50%,
-          transparent 100%
-        )`,
-            opacity: useTransform(scrollYProgress, [0, 1], [0.3, 0.5]),
-          }}
-        />
       </div>
 
-      {/* Connection lines */}
-      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <motion.path
-          d="M50% 20% Q 50% 40%, 30% 50% T 50% 80% Q 70% 90%, 50% 100%"
-          stroke="rgba(138, 43, 226, 0.3)"
-          strokeWidth="2"
-          fill="transparent"
-          strokeDasharray="5 5"
-          strokeDashoffset={lineDashOffset}
-        />
-      </svg>
+      {/* Sticky Title */}
+      <motion.div
+        className="sticky top-10 z-20 text-center"
+        style={{ opacity, scale }}
+      >
+        <h2 className="text-5xl sm:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-600">
+          Beyond
+          <br />
+          The Timeline
+        </h2>
+      </motion.div>
 
-      {/* Sticky Content with Cards */}
-      <div className="sticky top-0 h-full w-full flex items-start justify-center pt-8">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
-          <motion.h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center mb-16">
-            <motion.span
-              className="block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-600"
-              style={{ opacity: titleOpacity, y: titleY }}
-            >
-              Beyond The Timeline
-            </motion.span>
-          </motion.h2>
-
-          <div className="w-full max-w-7xl mx-auto relative z-10 min-h-[50vh] flex flex-col items-center justify-center gap-0">
-            {experiences.map((experience, i) => (
-              <motion.div
-                key={i}
-                className={`w-full ${
-                  i % 2 === 0
-                    ? "lg:w-[calc(75%-48px)] lg:self-start"
-                    : "lg:w-[calc(75%-48px)] lg:self-end"
-                }`}
-                style={{
-                  y: cardYs[i],
-                  opacity: cardOpacities[i],
-                  zIndex: activeHologram === i ? 10 : 1,
-                }}
-              >
-                <ThreeDCard
-                  index={i}
-                  experience={experience}
-                  scrollProgress={scrollYProgress}
-                  isHologramActive={activeHologram === i}
-                  range={[i * 0.2, i * 0.2 + 0.2, i * 0.2 + 0.4]}
-                />
-              </motion.div>
-            ))}
-          </div>
-        </div>
+      {/* Cards Container */}
+      <div className="relative z-10 flex flex-col gap-40 py-40">
+        {experiences.map((exp, i) => (
+          <ExperienceCard exp={exp} key={i} />
+        ))}
       </div>
+
+      {/* Global Grid Pattern */}
+      <style jsx global>{`
+        .bg-grid-pattern {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(59 130 246 / 0.1)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
+        }
+      `}</style>
     </section>
   );
 }
-
-export default HyperExperienceTimeline;

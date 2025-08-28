@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouter } from "next/navigation";
+import Bannerg from "../assets/bannerbg2.jpg";
 
-// Type for our refs
-
+// Dynamically import Three.js component with SSR disabled
 const ThreeScene = dynamic(() => import("./ThreeScene"), {
   ssr: false,
   loading: () => (
@@ -15,23 +16,60 @@ const ThreeScene = dynamic(() => import("./ThreeScene"), {
   ),
 });
 
+// Type for a floating dot
+interface Dot {
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+  duration: number;
+  delay: number;
+}
+
 const Hero = () => {
-  // Initialize refs with proper types
+  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+  const [dots, setDots] = useState<Dot[]>([]);
+
   const heroRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setIsMounted(true);
+
+    // Generate random dots on client
+    const generatedDots: Dot[] = Array.from({ length: 20 }, () => ({
+      width: Math.random() * 15,
+      height: Math.random() * 15,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      duration: Math.random() * 20 + 5,
+      delay: Math.random() * 5,
+    }));
+    setDots(generatedDots);
+
     gsap.registerPlugin(ScrollTrigger);
 
-    // Check if refs are available
-    if (!textRef.current?.children || !canvasRef.current || !heroRef.current)
+    return () => {
+      // Cleanup GSAP
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      gsap.globalTimeline.clear();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (
+      !isMounted ||
+      !textRef.current ||
+      !canvasRef.current ||
+      !heroRef.current
+    )
       return;
 
-    // Convert HTMLCollection to array for type safety
     const textChildren = Array.from(textRef.current.children);
 
-    // Animated text entry
+    // Text animation
     const textTween = gsap.from(textChildren, {
       duration: 1.2,
       y: 40,
@@ -41,7 +79,7 @@ const Hero = () => {
       delay: 0.4,
     });
 
-    // Floating animation for 3D container
+    // Floating 3D canvas
     const canvasTween = gsap.to(canvasRef.current, {
       y: 20,
       duration: 3,
@@ -50,7 +88,7 @@ const Hero = () => {
       ease: "sine.inOut",
     });
 
-    // Background parallax effect
+    // Background parallax
     const bgOverlay = heroRef.current.querySelector(".bg-overlay");
     const parallaxTween = bgOverlay
       ? gsap.to(bgOverlay, {
@@ -65,25 +103,33 @@ const Hero = () => {
         })
       : null;
 
-    // Cleanup animations
-    return () => {
-      textTween?.kill();
-      canvasTween?.kill();
-      parallaxTween?.scrollTrigger?.kill();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    ScrollTrigger.refresh();
+
+    const handleRouteChange = () => {
+      ScrollTrigger.refresh();
+      textTween.restart();
     };
-  }, []);
+    window.addEventListener("popstate", handleRouteChange);
+
+    return () => {
+      textTween.kill();
+      canvasTween.kill();
+      parallaxTween?.scrollTrigger?.kill();
+      window.removeEventListener("popstate", handleRouteChange);
+    };
+  }, [isMounted, router]);
 
   return (
     <section
+      id="hero"
       ref={heroRef}
       className="relative min-h-screen overflow-hidden text-white"
     >
-      {/* WebGL Background */}
+      {/* Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
-          src="/bannerbg.jpg"
-          alt="Modern 3D background"
+          src={Bannerg}
+          alt="Hero Background"
           fill
           priority
           quality={100}
@@ -114,55 +160,71 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 z-1 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-indigo-400/10"
-            style={{
-              width: `${Math.random() * 10 + 5}px`,
-              height: `${Math.random() * 10 + 5}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animation: `float ${Math.random() * 10 + 10}s linear infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          />
-        ))}
-      </div>
+      {/* Floating particles (client only) */}
+      {isMounted && (
+        <div className="absolute inset-0 z-1 overflow-hidden">
+          {dots.map((dot, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-indigo-400/10"
+              style={{
+                width: `${dot.width}px`,
+                height: `${dot.height}px`,
+                top: `${dot.top}%`,
+                left: `${dot.left}%`,
+                animation: `float ${dot.duration}s linear infinite`,
+                animationDelay: `${dot.delay}s`,
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col-reverse md:flex-row items-center justify-center md:justify-between pt-32 pb-24 gap-12">
-        {/* Text Content */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col-reverse md:flex-row items-center justify-center md:justify-between pt-0 pb-24 gap-12">
+        {/* Text */}
         <div ref={textRef} className="w-full md:w-1/2 space-y-8">
-          <div className="inline-flex items-center bg-indigo-500/10 px-4 py-2 rounded-full border border-indigo-400/30 backdrop-blur-sm">
+          <div
+            className="inline-flex items-center bg-indigo-500/10 px-4 py-2 rounded-full backdrop-blur-sm"
+            style={{
+              border: "1.5px solid rgba(59,130,246,0.5)",
+              boxShadow: "0 0 15px rgba(59,130,246,0.6)",
+            }}
+          >
             <span className="relative flex h-3 w-3 mr-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
             </span>
             <span className="text-indigo-400 text-sm font-medium tracking-wider">
-              NOW AVAILABLE
+              Web Developer
             </span>
           </div>
 
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-400 to-indigo-300 bg-[length:200%_200%] animate-gradient-shift">
-              Next-Level
+              Roshan Zamry
             </span>{" "}
             <br />
-            Web Experiences
+            Moulana
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 max-w-lg leading-relaxed">
-            Powered by React 19, Three.js, and WebGL shaders for unparalleled
-            performance and visuals.
+            I&apos;m an experienced web developer with 4+ years of proven
+            expertise in building responsive websites and web applications.
+            Specialized in React.js, Next.js, TypeScript, and WordPress, I focus
+            on delivering high-performance, user-friendly solutions.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 pt-2">
-            <button className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-8 py-4 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30">
+            <button
+              onClick={() => {
+                const el = document.getElementById("con-foot");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-8 py-4 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30"
+            >
               <span className="relative z-10 flex items-center gap-2">
-                <span>Launch Experience</span>
+                <span>Let's Work Together</span>
                 <svg
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -200,45 +262,76 @@ const Hero = () => {
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                 />
               </svg>
-              <span>View Demo</span>
+              <a
+                href="/cv/Roshan Zamry.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Download CV</span>
+              </a>
             </button>
-          </div>
-
-          <div className="pt-8 flex items-center gap-6">
-            <div className="flex -space-x-4">
-              {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="w-10 h-10 rounded-full border-2 border-slate-800 bg-gray-700 overflow-hidden"
-                >
-                  {/* Placeholder for team avatars */}
-                </div>
-              ))}
-            </div>
-            <div className="text-sm text-gray-400">
-              <p>Trusted by leading innovators</p>
-              <p className="text-white font-medium">15,000+ developers</p>
-            </div>
           </div>
         </div>
 
         {/* 3D Canvas */}
         <div
           ref={canvasRef}
-          className="w-full md:w-1/2 h-[350px] sm:h-[450px] md:h-[550px] lg:h-[650px] relative"
+          className="w-full md:w-1/2 h-[350px] sm:h-[450px] md:h-[550px] lg:h-[550px] relative"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-purple-900/20 rounded-3xl backdrop-blur-md border border-gray-700/50 shadow-2xl shadow-indigo-500/10 overflow-hidden">
-            <ThreeScene />
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-purple-900/20 rounded-3xl backdrop-blur-md overflow-hidden"
+            style={{
+              border: "1.5px solid rgba(59,130,246,0.5)",
+              boxShadow: "0 0 40px rgba(59,130,246,0.8)",
+            }}
+          >
+            <ThreeScene scaleFactor={0.9} height="100%" />
           </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-        <div className="animate-bounce w-6 h-10 border-4 border-gray-400 rounded-full flex justify-center">
-          <div className="w-1 h-2 bg-gray-300 rounded-full mt-2"></div>
+      <a
+        onClick={() => {
+          const el = document.getElementById("timeline");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }}
+      >
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+          <div className="animate-bounce w-6 h-10 border-4 border-gray-400 rounded-full flex justify-center">
+            <div className="w-1 h-2 bg-gray-300 rounded-full mt-2"></div>
+          </div>
         </div>
-      </div>
+      </a>
+
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-100vh) rotate(360deg);
+            opacity: 0;
+          }
+        }
+
+        @keyframes gradient-shift {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .animate-gradient-shift {
+          animation: gradient-shift 4s ease infinite;
+        }
+      `}</style>
     </section>
   );
 };
