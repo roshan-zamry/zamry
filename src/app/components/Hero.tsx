@@ -196,7 +196,7 @@ const Hero = () => {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
             </span>
             <span className="text-indigo-400 text-sm font-medium tracking-wider">
-              Web Developer
+              Web Developer.
             </span>
           </div>
 
