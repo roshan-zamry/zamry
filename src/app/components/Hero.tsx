@@ -209,10 +209,10 @@ const Hero = () => {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-300 max-w-lg leading-relaxed">
-            I&apos;m an experienced web developer with 4+ years of proven
-            expertise in building responsive websites and web applications.
-            Specialized in React.js, Next.js, TypeScript, and WordPress, I focus
-            on delivering high-performance, user-friendly solutions.
+            I am an experienced web developer with 4+ years of proven expertise
+            in building responsive websites and web applications. Specialized in
+            React.js, Next.js, TypeScript, and WordPress, I focus on delivering
+            high-performance, user-friendly solutions.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 pt-2">
