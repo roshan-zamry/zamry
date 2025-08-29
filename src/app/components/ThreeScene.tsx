@@ -68,7 +68,7 @@ const ThreeScene = ({
 
     // Function to create text geometry with the loaded font
     const createTextGeometry = (font: ThreeFont) => {
-      const textGeo = new TextGeometry("<rz/>", {
+      const textGeo = new TextGeometry("<rz />", {
         font,
         size: 1.5,
         depth: 0.2,
