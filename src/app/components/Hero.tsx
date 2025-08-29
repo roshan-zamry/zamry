@@ -123,7 +123,7 @@ const Hero = () => {
     <section
       id="hero"
       ref={heroRef}
-      className="relative min-h-screen overflow-hidden text-white"
+      className="relative min-h-screen overflow-hidden text-white "
     >
       {/* Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -181,7 +181,7 @@ const Hero = () => {
       )}
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col-reverse md:flex-row items-center justify-center md:justify-between pt-0 pb-24 gap-12">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col-reverse md:flex-row items-center justify-center md:justify-between pt-20 pb-24 gap-12">
         {/* Text */}
         <div ref={textRef} className="w-full md:w-1/2 space-y-8">
           <div
