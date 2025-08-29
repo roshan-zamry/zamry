@@ -148,7 +148,7 @@ export default function Testimonials() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
               >
-                "{testimonials[index].quote}"
+                &ldquo;{testimonials[index].quote}&ldquo;
               </motion.blockquote>
 
               <motion.div
