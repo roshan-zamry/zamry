@@ -224,7 +224,7 @@ const Hero = () => {
               className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-8 py-4 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30"
             >
               <span className="relative z-10 flex items-center gap-2">
-                <span>Let's Work Together</span>
+                <span>Let&apos;s Work Together</span>
                 <svg
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform"
                   fill="none"
