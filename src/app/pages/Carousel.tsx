@@ -27,17 +27,31 @@ const testimonials = [
   },
 ];
 
-// Predefined positions and sizes for the background elements
+// Simplified background elements for mobile performance
 const BACKGROUND_ELEMENTS = [
-  { width: 179.05, height: 196.92, top: 63.39, left: 10.35, x: 10, y: -5 },
-  { width: 159.07, height: 130.57, top: 7.74, left: 91.26, x: -15, y: 10 },
-  { width: 135.01, height: 175.68, top: 85.58, left: 87.76, x: 5, y: -8 },
+  { width: 120, height: 120, top: 15, left: 10 },
+  { width: 100, height: 100, top: 70, left: 80 },
 ];
 
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const [autoRotate, setAutoRotate] = useState(true);
   const [rotationInterval] = useState(5000); // 5 seconds
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if device is mobile
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
 
   const next = useCallback(
     () => setIndex((index + 1) % testimonials.length),
@@ -48,8 +62,8 @@ export default function Testimonials() {
     [index]
   );
 
-  // Generate stable animation durations
-  const durations = useMemo(() => [20, 25, 30], []);
+  // Use simpler animations on mobile
+  const durations = useMemo(() => (isMobile ? [0, 0] : [20, 25]), [isMobile]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -72,17 +86,19 @@ export default function Testimonials() {
   };
 
   return (
-    <div className="bg-slate-950 py-24 px-4" style={{ overflow: "hidden" }}>
-      {" "}
+    <div
+      className="bg-slate-950 py-16 md:py-24 px-4"
+      style={{ overflow: "hidden" }}
+    >
       <motion.h2
-        className="text-center text-4xl font-bold mb-16 text-white"
+        className="text-center text-3xl md:text-4xl font-bold mb-12 md:mb-16 text-white"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Client Testimonials
+        Partner Feedback
       </motion.h2>
-      <div className="max-w-4xl mx-auto relative h-[400px]">
+      <div className="max-w-4xl mx-auto relative h-[350px] md:h-[400px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
@@ -90,54 +106,49 @@ export default function Testimonials() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
             transition={{ duration: 0.5 }}
-            className="absolute inset-0 bg-white/5 backdrop-blur-lg rounded-3xl shadow-xl border border-white/10 overflow-hidden"
+            className="absolute inset-0 bg-white/5 rounded-3xl shadow-xl border border-white/10 overflow-hidden"
+            style={{
+              // Remove backdrop blur on mobile for performance
+              backdropFilter: isMobile ? "none" : "blur(10px)",
+              WebkitBackdropFilter: isMobile ? "none" : "blur(10px)",
+            }}
           >
-            {/* Subtle abstract shapes with fixed values */}
-            <div className="absolute inset-0 opacity-10">
-              {BACKGROUND_ELEMENTS.map((el, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute rounded-full bg-white/10 mix-blend-lighten blur-3xl"
-                  style={{
-                    width: `${el.width}px`,
-                    height: `${el.height}px`,
-                    top: `${el.top}%`,
-                    left: `${el.left}%`,
-                  }}
-                  animate={{
-                    x: [0, el.x],
-                    y: [0, el.y],
-                  }}
-                  transition={{
-                    duration: durations[i],
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "linear",
-                  }}
-                />
-              ))}
+            {/* Simplified background for mobile */}
+            <div className="absolute inset-0 opacity-[0.03]">
+              {!isMobile &&
+                BACKGROUND_ELEMENTS.map((el, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute rounded-full bg-white mix-blend-lighten"
+                    style={{
+                      width: `${el.width}px`,
+                      height: `${el.height}px`,
+                      top: `${el.top}%`,
+                      left: `${el.left}%`,
+                      filter: "blur(20px)",
+                    }}
+                    animate={{
+                      x: [0, 10],
+                      y: [0, -5],
+                    }}
+                    transition={{
+                      duration: durations[i],
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "linear",
+                    }}
+                  />
+                ))}
             </div>
 
-            <div className="relative z-10 h-full flex flex-col items-center justify-center p-8 text-center">
-              {/* <motion.div
-                className="w-20 h-20 rounded-full border-2 border-white/20 mb-6 overflow-hidden relative"
-                whileHover={{ scale: 1.05 }}
-              >
-                <Image
-                  src={testimonials[index].image}
-                  alt={testimonials[index].name}
-                  fill
-                  className="object-cover"
-                />
-              </motion.div> */}
-
+            <div className="relative z-10 h-full flex flex-col items-center justify-center p-6 md:p-8 text-center">
               <motion.blockquote
-                className="text-sm md:text-xl font-medium text-white mb-6 max-w-2xl"
+                className="text-sm md:text-xl font-medium text-white mb-4 md:mb-6 max-w-2xl leading-relaxed"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
               >
-                “{testimonials[index].quote}”
+                "{testimonials[index].quote}"
               </motion.blockquote>
 
               <motion.div
@@ -145,7 +156,7 @@ export default function Testimonials() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <p className="text-base font-semibold text-white">
+                <p className="text-base font-semibold text-white mt-4">
                   {testimonials[index].name}
                 </p>
                 <p className="text-sm text-white/70">
@@ -161,7 +172,7 @@ export default function Testimonials() {
             <button
               key={i}
               onClick={() => handleInteraction(() => setIndex(i))}
-              className={`w-3 h-3 rounded-full transition-all ${
+              className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all ${
                 index === i ? "bg-white scale-125" : "bg-white/30"
               }`}
               aria-label={`View testimonial ${i + 1}`}
@@ -171,12 +182,12 @@ export default function Testimonials() {
 
         <button
           onClick={() => handleInteraction(prev)}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-2 rounded-full backdrop-blur-sm z-20"
+          className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-2 rounded-full z-20"
           aria-label="Previous testimonial"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-white"
+            className="h-4 w-4 md:h-5 md:w-5 text-white"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -192,12 +203,12 @@ export default function Testimonials() {
 
         <button
           onClick={() => handleInteraction(next)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-2 rounded-full backdrop-blur-sm z-20"
+          className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-2 rounded-full z-20"
           aria-label="Next testimonial"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-white"
+            className="h-4 w-4 md:h-5 md:w-5 text-white"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

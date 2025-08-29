@@ -7,9 +7,20 @@ import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
   const toggleMenu = () => setOpen(!open);
+
+  // Handle scroll for sticky effect with blur
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Smooth scroll on hash navigation
   useEffect(() => {
@@ -33,7 +44,13 @@ const Navbar = () => {
   }, [pathname]);
 
   return (
-    <nav className="bg-slate-900 text-white p-4">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300 ${
+        isScrolled
+          ? "bg-slate-900/80 backdrop-blur-md shadow-lg"
+          : "bg-slate-900"
+      }`}
+    >
       <div className="flex items-center justify-between max-w-8xl mx-auto">
         {/* Logo */}
         <Link href="/">
@@ -50,57 +67,91 @@ const Navbar = () => {
         {/* Desktop Nav */}
         <ul className="hidden md:flex gap-6">
           <li>
-            <Link href="/#hero" className="hover:text-indigo-600">
+            <Link
+              href="/#hero"
+              className="hover:text-indigo-400 transition-colors duration-300"
+            >
               Home
             </Link>
           </li>
           <li>
-            <Link href="/#timeline" className="hover:text-indigo-600">
+            <Link
+              href="/#timeline"
+              className="hover:text-indigo-400 transition-colors duration-300"
+            >
               About
             </Link>
           </li>
           <li>
-            <Link href="/#projects" className="hover:text-indigo-600">
+            <Link
+              href="/#projects"
+              className="hover:text-indigo-400 transition-colors duration-300"
+            >
               Projects
             </Link>
           </li>
           <li>
-            <Link href="/#con-foot" className="hover:text-indigo-600">
+            <Link
+              href="/#con-foot"
+              className="hover:text-indigo-400 transition-colors duration-300"
+            >
               Get in Touch
             </Link>
           </li>
         </ul>
 
         {/* Mobile Toggle */}
-        <button onClick={toggleMenu} className="md:hidden">
+        <button
+          onClick={toggleMenu}
+          className="md:hidden p-2 rounded-lg hover:bg-slate-800 transition-colors"
+          aria-label="Toggle menu"
+        >
           {open ? <FiX size={24} /> : <FiMenu size={24} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {open && (
-        <ul className="md:hidden mt-4 flex flex-col gap-4 text-center">
-          <li>
-            <Link href="/#hero" onClick={toggleMenu}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/#timeline" onClick={toggleMenu}>
-              About
-            </Link>
-          </li>
-          <li>
-            <Link href="/#projects" onClick={toggleMenu}>
-              Projects
-            </Link>
-          </li>
-          <li>
-            <Link href="/#con-foot" onClick={toggleMenu}>
-              Get in Touch
-            </Link>
-          </li>
-        </ul>
+        <div className="md:hidden mt-4 bg-slate-800/95 backdrop-blur-lg rounded-xl p-4 border border-slate-700">
+          <ul className="flex flex-col gap-3">
+            <li>
+              <Link
+                href="/#hero"
+                onClick={toggleMenu}
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#timeline"
+                onClick={toggleMenu}
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+              >
+                About
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#projects"
+                onClick={toggleMenu}
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+              >
+                Projects
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#con-foot"
+                onClick={toggleMenu}
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+              >
+                Get in Touch
+              </Link>
+            </li>
+          </ul>
+        </div>
       )}
     </nav>
   );

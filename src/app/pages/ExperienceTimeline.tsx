@@ -79,7 +79,7 @@ const experiences: Experience[] = [
 
 // ------------------- CARD COMPONENT -------------------
 function ExperienceCard({ exp }: { exp: Experience }) {
-  const { ref, inView } = useInView({ threshold: 0.6, triggerOnce: false });
+  const { ref, inView } = useInView({ threshold: 0.6, triggerOnce: true });
 
   return (
     <motion.div
