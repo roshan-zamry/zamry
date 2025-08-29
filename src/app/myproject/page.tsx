@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import samle from "../assets/bannerbg.jpg";
@@ -11,7 +12,7 @@ const myprojects = [
   {
     title: "Payoneer products demo",
     description:
-      "I built this site using React, Next.js, and TypeScript to showcase Payoneer's global events. I focused on making event details easy to browse, adding filtering, and ensuring a smooth, responsive experience.",
+      "Built with React, Next.js, and TypeScript to showcase Payoneer's global events with easy browsing, filtering, and a responsive experience.",
     tags: ["React.js", "Next.js", "TypeScript"],
     colors: ["#6366F1", "#A78BFA"],
     link: "https://payoneer-indol.vercel.app/",
@@ -47,7 +48,7 @@ const myprojects = [
   {
     title: "CompanyName",
     description:
-      "Developed the CompanyName website to showcase businesses in the free zone, providing detailed company profiles and contacts.",
+      "Built the CompanyName website to showcase free zone businesses with profiles and contacts.",
     tags: ["React", "Next.js", "TypeScript"],
     colors: ["#10B981", "#3B82F6"],
     link: "https://spiffy-treacle-b1736c.netlify.app/",
@@ -56,7 +57,7 @@ const myprojects = [
   {
     title: "NBF Art",
     description:
-      "Developed using Next.js, React, and Tailwind CSS, this site showcases my expertise in building responsive, interactive web applications. The project emphasizes UI/UX design, responsive layouts, and performance optimization.",
+      "Built with Next.js, React, and Tailwind CSS, showcasing responsive, interactive web apps with focus on UI/UX and performance.",
     tags: ["React", "Next.js", "TypeScript"],
     colors: ["#8B5CF6", "#EC4899"],
     link: "https://nbf-art.com/",
@@ -72,6 +73,19 @@ const ProjectCard = ({
   index: number;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Scaled motion offsets for mobile
+  const titleX = isMobile ? -5 : -10;
+  const descX = isMobile ? -8 : -15;
+  const overlayY = isMobile ? 50 : 100;
 
   return (
     <motion.div
@@ -83,7 +97,7 @@ const ProjectCard = ({
       onHoverEnd={() => setIsHovered(false)}
       onClick={() => setIsHovered(!isHovered)} // mobile tap toggle
     >
-      {/* Project Image with Zoom Effect */}
+      {/* Background Image */}
       <motion.div
         className="absolute inset-0"
         animate={{ scale: isHovered ? 1.05 : 1 }}
@@ -93,7 +107,7 @@ const ProjectCard = ({
           src={project.image}
           alt={project.title}
           fill
-          className="object-cover"
+          className="object-cover w-full h-full"
           quality={90}
         />
         <div
@@ -104,29 +118,30 @@ const ProjectCard = ({
         />
       </motion.div>
 
-      {/* Project Info - Slides Up */}
+      {/* Overlay Content */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 z-10"
-        animate={{ y: isHovered ? 0 : 100, opacity: isHovered ? 1 : 0.9 }}
+        animate={{ y: isHovered ? 0 : overlayY, opacity: isHovered ? 1 : 0.9 }}
         transition={{ type: "spring", damping: 15 }}
       >
         <motion.div className="mb-3 sm:mb-4">
           <motion.h3
-            className="text-xl sm:text-2xl font-bold text-white mb-1 break-words"
-            animate={{ x: isHovered ? 0 : -10 }}
+            className="text-lg sm:text-2xl font-bold text-white mb-1 break-words"
+            animate={{ x: isHovered ? 0 : titleX }}
+            transition={{ type: "spring", stiffness: 100 }}
           >
             {project.title}
           </motion.h3>
           <motion.p
-            className="text-white/90 mb-2 sm:mb-3 text-sm sm:text-base break-words"
-            style={{ wordBreak: "break-word" }}
-            animate={{ x: isHovered ? 0 : -20 }}
-            transition={{ delay: 0.1 }}
+            className="text-white/90 mb-2 sm:mb-3 text-xs sm:text-base break-words"
+            animate={{ x: isHovered ? 0 : descX }}
+            transition={{ delay: 0.1, type: "spring", stiffness: 100 }}
           >
             {project.description}
           </motion.p>
         </motion.div>
 
+        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
           {project.tags.map((tag, i) => (
             <motion.span
@@ -145,6 +160,7 @@ const ProjectCard = ({
           ))}
         </div>
 
+        {/* View Site Button */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: isHovered ? 1 : 0 }}
@@ -173,7 +189,7 @@ const ProjectCard = ({
         </motion.div>
       </motion.div>
 
-      {/* Colorful Glow */}
+      {/* Colored Glow */}
       <motion.div
         className="absolute inset-0 opacity-0 rounded-2xl"
         style={{
@@ -186,14 +202,12 @@ const ProjectCard = ({
   );
 };
 
-export default function MyProjectPage() {
+export default function ProjectsShowcase() {
   return (
-    <div className="bg-black min-h-screen">
-      {/* Navbar on top */}
+    <div id="projects" className="bg-black py-16 sm:py-20 px-4">
       <Navbar />
 
-      {/* Page Content */}
-      <div className="py-16 sm:py-20 px-4 max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -201,15 +215,27 @@ export default function MyProjectPage() {
           className="text-center mb-12 sm:mb-16"
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3 sm:mb-4">
-            Featured Projects
+            Things I&apos;ve Built
           </h2>
+          <p className="text-base sm:text-xl text-white/70 max-w-2xl mx-auto">
+            Selected works showcasing my skills in development and design
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {myprojects.map((project, index) => (
-            <ProjectCard key={index} project={project} index={index} />
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          {myprojects.map((myprojects, index) => (
+            <ProjectCard key={index} project={myprojects} index={index} />
           ))}
         </div>
+
+        {/* View Projects Button */}
+        <motion.div
+          className="flex justify-center mt-12 sm:mt-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        ></motion.div>
       </div>
       <Footer />
     </div>

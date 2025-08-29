@@ -109,6 +109,8 @@ const ThreeScene = ({
 
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 1.5;
 
       // --- Animation ---
       const animate = () => {

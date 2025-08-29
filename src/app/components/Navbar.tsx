@@ -55,7 +55,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link href="/">
           <h1 className="text-2xl font-bold relative group cursor-pointer">
-            <span className="group-hover:opacity-0 transition-opacity duration-300">
+            <span className="group-hover:opacity-0 transition-opacity duration-300 text-white">
               {"<rz />"}
             </span>
             <span className="absolute inset-0 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 hover:animate-gradient-x">
@@ -69,7 +69,7 @@ const Navbar = () => {
           <li>
             <Link
               href="/#hero"
-              className="hover:text-indigo-400 transition-colors duration-300"
+              className="hover:text-indigo-400 transition-colors duration-300 text-white"
             >
               Home
             </Link>
@@ -77,7 +77,7 @@ const Navbar = () => {
           <li>
             <Link
               href="/#timeline"
-              className="hover:text-indigo-400 transition-colors duration-300"
+              className="hover:text-indigo-400 transition-colors duration-300 text-white"
             >
               About
             </Link>
@@ -85,7 +85,7 @@ const Navbar = () => {
           <li>
             <Link
               href="/#projects"
-              className="hover:text-indigo-400 transition-colors duration-300"
+              className="hover:text-indigo-400 transition-colors duration-300 text-white"
             >
               Projects
             </Link>
@@ -93,7 +93,7 @@ const Navbar = () => {
           <li>
             <Link
               href="/#con-foot"
-              className="hover:text-indigo-400 transition-colors duration-300"
+              className="hover:text-indigo-400 transition-colors duration-300 text-white"
             >
               Get in Touch
             </Link>
@@ -103,7 +103,7 @@ const Navbar = () => {
         {/* Mobile Toggle */}
         <button
           onClick={toggleMenu}
-          className="md:hidden p-2 rounded-lg hover:bg-slate-800 transition-colors"
+          className="md:hidden p-2 rounded-lg hover:bg-slate-800 transition-colors text-white"
           aria-label="Toggle menu"
         >
           {open ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -118,7 +118,7 @@ const Navbar = () => {
               <Link
                 href="/#hero"
                 onClick={toggleMenu}
-                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors text-white"
               >
                 Home
               </Link>
@@ -127,7 +127,7 @@ const Navbar = () => {
               <Link
                 href="/#timeline"
                 onClick={toggleMenu}
-                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors text-white"
               >
                 About
               </Link>
@@ -136,7 +136,7 @@ const Navbar = () => {
               <Link
                 href="/#projects"
                 onClick={toggleMenu}
-                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors text-white"
               >
                 Projects
               </Link>
@@ -145,7 +145,7 @@ const Navbar = () => {
               <Link
                 href="/#con-foot"
                 onClick={toggleMenu}
-                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors"
+                className="block py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-colors text-white"
               >
                 Get in Touch
               </Link>
