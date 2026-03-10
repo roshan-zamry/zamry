@@ -10,28 +10,26 @@ const projects = [
   {
     title: "CompanyName",
     description:
-      "Built the CompanyName website to showcase free zone businesses with profiles and contacts.",
+      "Built with modern frontend technologies, showcasing responsive design, interactive components, and performance-focused UI with attention to smooth user experience.",
     tags: ["React", "Next.js", "TypeScript"],
     colors: ["#10B981", "#3B82F6"],
     link: "https://spiffy-treacle-b1736c.netlify.app/",
     image: sample,
   },
   {
-    title: "NBF Art",
-    description:
-      "Built with Next.js, React, and Tailwind CSS, showcasing responsive, interactive web apps with focus on UI/UX and performance.",
-    tags: ["React", "Next.js", "TypeScript"],
+    title: "droneleaf",
+    description:"Built for AI-powered drone systems, showcasing autonomous flight control, mission management platforms, and advanced UAV technologies focused on reliability and performance.",
+    tags: ["wordpress", "css", "php"],
     colors: ["#8B5CF6", "#EC4899"],
-    link: "https://nbf-art.com/",
+    link: "https://droneleaf.io/",
     image: sample,
   },
   {
-    title: "Payoneer products demo",
-    description:
-      "Built with React, Next.js, and TypeScript to showcase Payoneer's global events with easy browsing, filtering, and a responsive experience.",
+    title: "brocrypt",
+    description:"Built for high-performance business websites and web applications, showcasing conversion-focused design, integrated analytics, and SEO-ready platforms focused on speed, tracking, and measurable growth.",
     tags: ["React.js", "Next.js", "TypeScript"],
     colors: ["#6366F1", "#A78BFA"],
-    link: "https://payoneer-indol.vercel.app/",
+    link: "https://brocrypt.com/",
     image: sample,
   },
 ];
@@ -205,7 +203,7 @@ export default function ProjectsShowcase() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <button className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-6 sm:px-8 py-2 sm:py-3 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30">
+          {/* <button className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-6 sm:px-8 py-2 sm:py-3 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30">
             <Link
               href="/myproject"
               className="relative z-10 flex items-center gap-2"
@@ -226,7 +224,7 @@ export default function ProjectsShowcase() {
               </svg>
             </Link>
             <span className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          </button>
+          </button> */}
         </motion.div>
       </div>
     </div>
