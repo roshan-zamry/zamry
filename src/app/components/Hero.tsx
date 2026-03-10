@@ -263,7 +263,7 @@ const Hero = () => {
                 />
               </svg>
               <a
-                href="/cv/Roshan Zamry.pdf"
+                href="/cv/public/cv/ROSHAN ZAMRY.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
               >
