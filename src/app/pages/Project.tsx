@@ -203,7 +203,7 @@ export default function ProjectsShowcase() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          {/* <button className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-6 sm:px-8 py-2 sm:py-3 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30">
+           <button className="relative group overflow-hidden bg-gradient-to-br from-indigo-600 to-purple-700 px-6 sm:px-8 py-2 sm:py-3 rounded-xl text-white font-medium transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/30">
             <Link
               href="/myproject"
               className="relative z-10 flex items-center gap-2"
@@ -224,7 +224,7 @@ export default function ProjectsShowcase() {
               </svg>
             </Link>
             <span className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-          </button> */}
+          </button> 
         </motion.div>
       </div>
     </div>
